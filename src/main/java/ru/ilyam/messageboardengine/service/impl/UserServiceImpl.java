@@ -4,10 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.ilyam.messageboardengine.dtos.user.CreateUserDto;
 import ru.ilyam.messageboardengine.dtos.user.ReadUserDto;
+import ru.ilyam.messageboardengine.dtos.user.UpdateUserDto;
 import ru.ilyam.messageboardengine.dtos.user.UsersResponseDto;
+import ru.ilyam.messageboardengine.entity.Topic;
+import ru.ilyam.messageboardengine.exception.AppCustomException;
 import ru.ilyam.messageboardengine.mapper.UserMapper;
 import ru.ilyam.messageboardengine.repository.UserRepository;
 import ru.ilyam.messageboardengine.service.UserService;
+import ru.ilyam.messageboardengine.utils.ServicesUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +46,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ReadUserDto updateUser(Long userId, CreateUserDto requestDto) {
-        return null;
+    public ReadUserDto updateUser(Long userId, UpdateUserDto requestDto) {
+        var user = userRepository.findById(userId).orElseThrow(
+                () -> new AppCustomException(404, "Пользователь не был найден")
+        );
+        if (ServicesUtils.ifFieldUpdate(requestDto.getEmail())) {
+            user.setEmail(requestDto.getEmail());
+        }
+        if (ServicesUtils.ifFieldUpdate(requestDto.getUsername())) {
+            user.setUsername(requestDto.getUsername());
+        }
+        if (ServicesUtils.ifFieldUpdate(requestDto.getPassword())) {
+            user.setPassword(requestDto.getPassword());
+        }
+        return userMapper.toDto(userRepository.save(user));
     }
 }

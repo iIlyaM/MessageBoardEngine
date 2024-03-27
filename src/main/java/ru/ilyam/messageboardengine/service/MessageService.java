@@ -1,5 +1,7 @@
 package ru.ilyam.messageboardengine.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.ilyam.messageboardengine.dtos.message.CreateMessageDto;
 import ru.ilyam.messageboardengine.dtos.message.MessagesResponseDto;
 import ru.ilyam.messageboardengine.dtos.message.ReadMessageDto;
@@ -12,7 +14,7 @@ public interface MessageService {
 
     Message create(CreateMessageDto message, Topic topic, Long userId);
 
-    MessagesResponseDto getAll();
+    Page<ReadMessageDto> getAll(Pageable pageable);
 
     ReadMessageDto findById(Long id);
 

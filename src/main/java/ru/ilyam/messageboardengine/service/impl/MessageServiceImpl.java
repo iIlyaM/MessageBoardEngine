@@ -1,6 +1,8 @@
 package ru.ilyam.messageboardengine.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.ilyam.messageboardengine.dtos.message.CreateMessageDto;
 import ru.ilyam.messageboardengine.dtos.message.MessagesResponseDto;
@@ -41,11 +43,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessagesResponseDto getAll() {
-        return new MessagesResponseDto(
-                messageRepository.findAll().stream()
-                        .map(messageMapper::toDto)
-                        .toList());
+    public Page<ReadMessageDto> getAll(Pageable pageable) {
+        return messageRepository.findAll(pageable).map(messageMapper::toDto);
     }
 
     @Override

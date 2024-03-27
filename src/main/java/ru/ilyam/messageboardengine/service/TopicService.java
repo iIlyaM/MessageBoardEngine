@@ -1,8 +1,12 @@
 package ru.ilyam.messageboardengine.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.ilyam.messageboardengine.dtos.message.CreateMessageDto;
 import ru.ilyam.messageboardengine.dtos.message.TopicMessagesResponseDto;
 import ru.ilyam.messageboardengine.dtos.topic.*;
+
+import java.util.List;
 
 public interface TopicService {
     void create(CreateTopicDto topicDto);
@@ -13,7 +17,7 @@ public interface TopicService {
 
     ReadTopicDto updateTopicName(UpdateTopicDto topicDto, Long id);
 
-    TopicsResponseDto findAll();
+    Page<ReadTopicDto> findAll(Pageable pageable);
 
     void delete(Long id);
 
